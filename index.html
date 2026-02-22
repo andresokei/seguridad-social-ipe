@@ -49,17 +49,26 @@
   }
 
   /* ===== SCREENS ===== */
-  .screen { display: none; position: relative; z-index: 1; }
-  .screen.active { display: block; }
+  html, body { height: 100%; margin: 0; padding: 0; }
+
+  #app {
+    width: 100%;
+  }
+
+  .screen {
+    display: none;
+  }
 
   /* ===== HOME ===== */
   #home {
     min-height: 100vh;
-    display: flex; flex-direction: column;
+    display: none;
+    flex-direction: column;
     align-items: center; justify-content: center;
     padding: 40px 20px;
     text-align: center;
   }
+  #home.active { display: flex !important; }
 
   .logo-badge {
     display: inline-flex; align-items: center; gap: 10px;
@@ -136,10 +145,11 @@
 
   /* ===== MODE SELECTOR ===== */
   #mode-select {
-    min-height: 100vh; display: flex; flex-direction: column;
+    min-height: 100vh; display: none; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 40px 20px; text-align: center;
   }
+  #mode-select.active { display: flex !important; }
 
   .back-btn {
     position: fixed; top: 24px; left: 24px; z-index: 100;
@@ -187,10 +197,11 @@
 
   /* ===== TOPIC SELECT ===== */
   #topic-select {
-    min-height: 100vh; display: flex; flex-direction: column;
+    min-height: 100vh; display: none; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 80px 20px 40px;
   }
+  #topic-select.active { display: flex !important; }
 
   .topic-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -222,7 +233,8 @@
   .tc-pill { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: var(--surface2); color: var(--muted); }
 
   /* ===== LESSON SCREEN ===== */
-  #lesson-screen { padding: 100px 20px 60px; max-width: 760px; margin: 0 auto; }
+  #lesson-screen { display: none; padding: 100px 20px 60px; max-width: 760px; margin: 0 auto; }
+  #lesson-screen.active { display: block; }
 
   .lesson-progress {
     position: fixed; top: 0; left: 0; right: 0; z-index: 50;
@@ -288,7 +300,8 @@
   .btn-nav.next:hover { box-shadow: 0 0 30px rgba(79,142,247,0.4); }
 
   /* ===== QUIZ SCREEN ===== */
-  #quiz-screen { padding: 100px 20px 60px; max-width: 680px; margin: 0 auto; }
+  #quiz-screen { display: none; padding: 100px 20px 60px; max-width: 680px; margin: 0 auto; }
+  #quiz-screen.active { display: block; }
 
   .quiz-card {
     background: var(--surface); border: 1px solid var(--border);
@@ -358,10 +371,11 @@
 
   /* ===== RESULTS SCREEN ===== */
   #results-screen {
-    min-height: 100vh; display: flex; flex-direction: column;
+    min-height: 100vh; display: none; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 80px 20px; text-align: center;
   }
+  #results-screen.active { display: flex !important; }
 
   .score-ring {
     width: 160px; height: 160px; margin: 0 auto 32px;
@@ -401,6 +415,7 @@
 </head>
 <body>
 
+<div id="app">
 <!-- BACK BUTTON -->
 <button class="back-btn" id="backBtn" onclick="goBack()">← Volver</button>
 
@@ -528,6 +543,8 @@
     <button class="btn-secondary" onclick="showScreen('home')">Inicio</button>
   </div>
 </div>
+
+</div><!-- /#app -->
 
 <script>
 // =====================
@@ -854,7 +871,9 @@ function showScreen(id) {
   const backBtn = document.getElementById('backBtn');
   backBtn.classList.toggle('visible', id !== 'home');
   history.push(id);
-  window.scrollTo(0,0);
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
 }
 
 function goBack() {
