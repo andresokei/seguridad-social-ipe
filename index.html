@@ -580,7 +580,7 @@ const topics = [
         body: `
           <p>Los trabajadores por cuenta propia están encuadrados en el <strong>RETA (Régimen Especial de Trabajadores Autónomos)</strong>. A diferencia de los asalariados, ellos mismos gestionan y pagan su cotización.</p>
           <p>Desde 2023 existe el <strong>sistema de cotización por ingresos reales</strong>: el autónomo declara sus rendimientos netos estimados y cotiza en función de tramos de ingresos, pudiendo ajustar la cuota cada dos meses.</p>
-          <div class="info-box yellow">⚠️ <strong>Recuerda:</strong> Un autónomo que no cotiza pierde el derecho a prestaciones como la incapacidad temporal o la jubilación. La cotización mínima en 2024 es de <strong>230€/mes</strong> aproximadamente.</div>
+          <div class="info-box yellow">⚠️ <strong>Recuerda:</strong> Un autónomo que no cotiza pierde el derecho a prestaciones como la incapacidad temporal o la jubilación. En 2026 se mantienen las tablas de cotización de 2025: la cuota mínima es de aproximadamente <strong>200€/mes</strong> (tramo de rendimientos más bajos).</div>
         `
       }
     ],
@@ -642,7 +642,7 @@ const topics = [
         body: `
           <p>La <strong>base de cotización</strong> es el importe sobre el que se aplican los porcentajes para calcular cuánto hay que pagar. En el Régimen General se calcula a partir del <strong>salario bruto mensual</strong> más las pagas extraordinarias prorrateadas.</p>
           <p>Tiene un <strong>mínimo y un máximo</strong> establecidos cada año por ley. En 2024:</p>
-          <div class="info-box green">📊 Base mínima: <strong>1.323€/mes</strong> (ligada al SMI)<br>Base máxima: <strong>4.720,50€/mes</strong></div>
+          <div class="info-box green">📊 Base mínima: <strong>pendiente de actualización con el SMI 2026</strong> (se aplican provisionalmente las bases de 2025)<br>Base máxima: <strong>5.101,20€/mes</strong> (RDL 3/2026)</div>
           <p>Si tu salario está entre estos límites, cotizas por tu salario real. Si supera el máximo, solo cotizas hasta ese tope.</p>
         `
       },
@@ -692,10 +692,10 @@ const topics = [
         explain: "La base de cotización incluye el salario bruto mensual más la parte proporcional de las pagas extraordinarias, las horas extra y otros conceptos retributivos regulares."
       },
       {
-        q: "¿Para qué sirve cotizar al concepto de FOGASA?",
-        opts: ["Para financiar las pensiones de jubilación", "Para cubrir salarios e indemnizaciones impagados por empresas insolventes", "Para sufragar la formación profesional continua", "Para pagar las prestaciones por desempleo"],
-        correct: 1,
-        explain: "El Fondo de Garantía Salarial (FOGASA) garantiza el cobro de salarios e indemnizaciones cuando una empresa no puede pagarlos por insolvencia o concurso de acreedores. La cotización a este fondo es íntegramente a cargo de la empresa."
+        q: "¿Cuál es la base máxima de cotización al Régimen General en 2026?",
+        opts: ["3.500€/mes", "4.720,50€/mes", "5.101,20€/mes", "6.000€/mes"],
+        correct: 2,
+        explain: "Según el RDL 3/2026, la base máxima de cotización al Régimen General queda fijada en 5.101,20€ mensuales desde el 1 de enero de 2026, un 3,9% más que en 2025."
       }
     ]
   },
@@ -727,8 +727,8 @@ const topics = [
         tag: "Lección 3 — Jubilación y otras",
         title: "Jubilación, maternidad y paternidad",
         body: `
-          <p>La <strong>pensión de jubilación</strong> es la prestación más importante del sistema. Para acceder a la jubilación ordinaria en 2024 necesitas tener <strong>65 años</strong> y al menos <strong>15 años cotizados</strong> (de los cuales 2 en los últimos 15 años).</p>
-          <div class="info-box">📈 Cuantos más años cotizados, mayor es la pensión. Con 37 años y 3 meses (2024) se tiene derecho al 100% de la base reguladora.</div>
+          <p>La <strong>pensión de jubilación</strong> es la prestación más importante del sistema. En 2026 existen dos vías de jubilación ordinaria: con <strong>65 años</strong> si se acreditan al menos <strong>38 años y 3 meses cotizados</strong>, o con <strong>66 años y 10 meses</strong> para quienes tengan menos tiempo cotizado (en 2027 la edad general subirá a 67 años).</p>
+          <div class="info-box">📈 Para cobrar el <strong>100% de la base reguladora</strong> en 2026 se necesitan <strong>36 años y 6 meses cotizados</strong>. Con solo 15 años cotizados se accede al 50%. A partir de 2027 subirá a 37 años.</div>
           <p>El <strong>nacimiento y cuidado del menor</strong> da derecho a <strong>16 semanas</strong> de permiso remunerado tanto para la madre como para el padre (intransferibles). La prestación es el <strong>100% de la base reguladora</strong>, sin periodo de carencia para nacimiento biológico.</p>
           <p>Existen también prestaciones por <strong>riesgo durante el embarazo</strong>, <strong>incapacidad permanente</strong>, <strong>viudedad</strong>, <strong>orfandad</strong> y el <strong>Ingreso Mínimo Vital (IMV)</strong>.</p>
         `
@@ -748,10 +748,10 @@ const topics = [
         explain: "Se necesitan al menos 360 días cotizados en los últimos 6 años para tener derecho a la prestación contributiva por desempleo, lo que da derecho a 4 meses de paro."
       },
       {
-        q: "¿Cuál es la duración del permiso por nacimiento y cuidado del menor para cada progenitor?",
-        opts: ["8 semanas", "12 semanas", "16 semanas", "20 semanas"],
+        q: "¿Cuál es la edad de jubilación ordinaria en 2026 para quien tiene menos de 38 años y 3 meses cotizados?",
+        opts: ["65 años", "65 años y 6 meses", "66 años y 10 meses", "67 años"],
         correct: 2,
-        explain: "Desde 2021, ambos progenitores tienen derecho a 16 semanas de permiso (intransferibles) con el 100% de la base reguladora. 6 de esas semanas deben disfrutarse obligatoriamente justo tras el parto o adopción."
+        explain: "En 2026, la edad ordinaria de jubilación es de 66 años y 10 meses para quienes no alcanzan los 38 años y 3 meses cotizados. Quienes sí los acrediten pueden jubilarse a los 65 años. En 2027 la edad general subirá a 67."
       },
       {
         q: "¿Qué porcentaje de la base reguladora se cobra a partir del 7.º mes de prestación por desempleo?",
@@ -766,11 +766,11 @@ const topics = [
         explain: "Los accidentes de trabajo y enfermedades profesionales no requieren periodo de carencia. La protección es inmediata: se percibe prestación desde el día siguiente al accidente."
       },
       {
-        q: "¿Qué es el Ingreso Mínimo Vital (IMV)?",
-        opts: ["Una prestación para jubilados con pensiones bajas", "Una prestación no contributiva que garantiza ingresos mínimos a personas en situación de vulnerabilidad", "El salario mínimo interprofesional (SMI)", "Una ayuda temporal solo para desempleados de larga duración"],
-        correct: 1,
-        explain: "El IMV es una prestación no contributiva de la Seguridad Social creada en 2020 que garantiza un nivel mínimo de renta a personas y hogares en situación de vulnerabilidad económica, independientemente de si han cotizado."
-      }
+        q: "¿Cuántos años cotizados se necesitan para cobrar el 100% de la pensión de jubilación en 2026?",
+        opts: ["15 años", "25 años", "36 años y 6 meses", "37 años y 3 meses"],
+        correct: 2,
+        explain: "En 2026, se necesitan 36 años y 6 meses cotizados para tener derecho al 100% de la base reguladora. Con solo 15 años se accede al 50%. A partir de 2027 el requisito sube a 37 años."
+      },
     ]
   },
   {
