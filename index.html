@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeguraNet — Aprende Seguridad Social</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141728;
+    --surface2: #1c2035;
+    --border: #2a2f4a;
+    --accent: #4f8ef7;
+    --accent2: #f7c948;
+    --accent3: #5de8b0;
+    --red: #f76f6f;
+    --text: #e8eaf6;
+    --muted: #7a80a0;
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG decoration */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; left: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(93,232,176,0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; position: relative; z-index: 1; }
+  .screen.active { display: block; }
+
+  /* ===== HOME ===== */
+  #home {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .logo-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 8px 18px; border-radius: 100px;
+    font-size: 13px; color: var(--accent); margin-bottom: 32px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    animation: fadeUp 0.6s ease both;
+  }
+  .logo-badge span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent3); display: inline-block; animation: pulse 2s infinite; }
+
+  h1.hero {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  h1.hero em { font-style: normal; color: var(--accent); }
+  h1.hero .yellow { color: var(--accent2); }
+
+  .hero-sub {
+    font-size: 18px; color: var(--muted); font-weight: 300;
+    max-width: 500px; line-height: 1.6;
+    margin: 0 auto 48px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .home-buttons {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff; font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 700;
+    padding: 16px 32px; border-radius: 100px; border: none;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 0 30px rgba(79,142,247,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(79,142,247,0.5); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text); font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 600;
+    padding: 16px 32px; border-radius: 100px;
+    border: 1px solid var(--border); cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); background: rgba(79,142,247,0.05); }
+
+  .topics-preview {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    max-width: 560px; margin: 64px auto 0;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+  @media(max-width: 480px) { .topics-preview { grid-template-columns: 1fr; } }
+
+  .topic-chip {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 14px;
+    text-align: left; cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .topic-chip:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .topic-chip .icon { font-size: 28px; flex-shrink: 0; }
+  .topic-chip .tc-label { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+  .topic-chip .tc-count { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ===== MODE SELECTOR ===== */
+  #mode-select {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px; text-align: center;
+  }
+
+  .back-btn {
+    position: fixed; top: 24px; left: 24px; z-index: 100;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); font-family: 'DM Sans', sans-serif;
+    font-size: 14px; padding: 10px 18px; border-radius: 100px;
+    cursor: pointer; transition: color 0.15s, border-color 0.15s;
+    display: none;
+  }
+  .back-btn:hover { color: var(--text); border-color: var(--accent); }
+  .back-btn.visible { display: block; }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800; margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .section-sub { color: var(--muted); font-size: 16px; margin-bottom: 48px; }
+
+  .mode-cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px; max-width: 700px; width: 100%;
+  }
+
+  .mode-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 32px 28px;
+    cursor: pointer; text-align: left;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .mode-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+  .mode-card.learn:hover { border-color: var(--accent); }
+  .mode-card.quiz:hover { border-color: var(--accent2); }
+
+  .mode-icon { font-size: 40px; margin-bottom: 18px; }
+  .mode-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .mode-desc { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .mode-tag {
+    display: inline-block; margin-top: 16px;
+    font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 100px;
+  }
+  .learn .mode-tag { background: rgba(79,142,247,0.15); color: var(--accent); }
+  .quiz .mode-tag { background: rgba(247,201,72,0.15); color: var(--accent2); }
+
+  /* ===== TOPIC SELECT ===== */
+  #topic-select {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 80px 20px 40px;
+  }
+
+  .topic-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; max-width: 800px; width: 100%; margin-top: 40px;
+  }
+
+  .topic-card {
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: var(--radius); padding: 28px 24px;
+    cursor: pointer; transition: all 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .topic-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent-color, var(--accent)); opacity: 0; transition: opacity 0.2s;
+  }
+  .topic-card:hover::before { opacity: 1; }
+  .topic-card:hover { transform: translateY(-3px); border-color: var(--accent-color, var(--accent)); }
+
+  .topic-card[data-color="blue"] { --accent-color: var(--accent); }
+  .topic-card[data-color="green"] { --accent-color: var(--accent3); }
+  .topic-card[data-color="yellow"] { --accent-color: var(--accent2); }
+  .topic-card[data-color="red"] { --accent-color: var(--red); }
+
+  .tc-icon { font-size: 36px; margin-bottom: 14px; }
+  .tc-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .tc-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .tc-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tc-pill { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: var(--surface2); color: var(--muted); }
+
+  /* ===== LESSON SCREEN ===== */
+  #lesson-screen { padding: 100px 20px 60px; max-width: 760px; margin: 0 auto; }
+
+  .lesson-progress {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    padding: 16px 24px 16px 100px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .progress-bar-wrap {
+    flex: 1; height: 6px; background: var(--surface2);
+    border-radius: 100px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--accent);
+    border-radius: 100px; transition: width 0.4s ease;
+  }
+  .progress-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  .lesson-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .lesson-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .lesson-tag .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+  .lesson-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(22px, 4vw, 32px);
+    font-weight: 800; margin-bottom: 20px; line-height: 1.2;
+  }
+
+  .lesson-body { font-size: 16px; line-height: 1.8; color: #c8cce8; }
+  .lesson-body p { margin-bottom: 16px; }
+  .lesson-body strong { color: var(--text); font-weight: 500; }
+
+  .info-box {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 16px 20px;
+    margin: 20px 0; font-size: 14px; line-height: 1.7;
+  }
+  .info-box.yellow { border-color: var(--accent2); }
+  .info-box.green { border-color: var(--accent3); }
+
+  .lesson-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 32px; gap: 12px;
+  }
+
+  .btn-nav {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    padding: 14px 28px; border-radius: 100px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-nav:hover { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+  .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-nav.next { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-nav.next:hover { box-shadow: 0 0 30px rgba(79,142,247,0.4); }
+
+  /* ===== QUIZ SCREEN ===== */
+  #quiz-screen { padding: 100px 20px 60px; max-width: 680px; margin: 0 auto; }
+
+  .quiz-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .quiz-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 28px;
+  }
+  .quiz-number { font-size: 13px; color: var(--muted); }
+  .quiz-score-badge {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    padding: 6px 14px; border-radius: 100px;
+    background: rgba(93,232,176,0.1); color: var(--accent3);
+  }
+
+  .quiz-question {
+    font-family: 'Syne', sans-serif; font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700; line-height: 1.35; margin-bottom: 32px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option-btn {
+    background: var(--surface2); border: 2px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 400;
+    padding: 16px 20px; border-radius: 12px;
+    cursor: pointer; text-align: left; transition: all 0.15s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .option-btn .opt-letter {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+    flex-shrink: 0; transition: all 0.15s;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(79,142,247,0.06); }
+  .option-btn:hover:not(:disabled) .opt-letter { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .option-btn.correct { border-color: var(--accent3) !important; background: rgba(93,232,176,0.08) !important; }
+  .option-btn.correct .opt-letter { background: var(--accent3) !important; border-color: var(--accent3) !important; color: #000 !important; }
+  .option-btn.wrong { border-color: var(--red) !important; background: rgba(247,111,111,0.08) !important; }
+  .option-btn.wrong .opt-letter { background: var(--red) !important; border-color: var(--red) !important; color: #fff !important; }
+  .option-btn:disabled { cursor: not-allowed; }
+
+  .feedback-box {
+    margin-top: 20px; padding: 16px 20px;
+    border-radius: 12px; font-size: 14px; line-height: 1.6;
+    display: none;
+  }
+  .feedback-box.correct { background: rgba(93,232,176,0.1); border: 1px solid rgba(93,232,176,0.3); color: var(--accent3); }
+  .feedback-box.wrong { background: rgba(247,111,111,0.1); border: 1px solid rgba(247,111,111,0.3); color: var(--red); }
+  .feedback-box .feedback-icon { font-size: 18px; margin-right: 8px; }
+
+  .quiz-next {
+    margin-top: 24px; width: 100%;
+    background: var(--accent); border: none; border-radius: 100px;
+    color: #fff; font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 700;
+    padding: 16px; cursor: pointer; display: none;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .quiz-next:hover { box-shadow: 0 0 30px rgba(79,142,247,0.4); transform: translateY(-1px); }
+
+  /* ===== RESULTS SCREEN ===== */
+  #results-screen {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 80px 20px; text-align: center;
+  }
+
+  .score-ring {
+    width: 160px; height: 160px; margin: 0 auto 32px;
+    position: relative;
+  }
+  .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .score-ring circle { fill: none; stroke-width: 10; stroke-linecap: round; }
+  .score-ring .bg-ring { stroke: var(--surface2); }
+  .score-ring .fg-ring { stroke: var(--accent3); stroke-dasharray: 408; transition: stroke-dashoffset 1s ease; }
+  .score-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800;
+  }
+
+  .result-title { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; margin-bottom: 10px; }
+  .result-sub { color: var(--muted); font-size: 16px; margin-bottom: 40px; }
+
+  .result-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width: 600px) {
+    .lesson-card, .quiz-card { padding: 24px 20px; }
+    .lesson-nav { flex-direction: column; }
+    .btn-nav { width: 100%; text-align: center; }
+    .lesson-progress { padding-left: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BACK BUTTON -->
+<button class="back-btn" id="backBtn" onclick="goBack()">← Volver</button>
+
+<!-- ===== HOME ===== -->
+<div id="home" class="screen active">
+  <div class="logo-badge"><span></span> IPE I · Seguridad Social</div>
+  <h1 class="hero">Aprende<br><em>Seguridad</em><br><span class="yellow">Social</span></h1>
+  <p class="hero-sub">4 unidades temáticas, lecciones interactivas y quizzes para consolidar lo aprendido.</p>
+  <div class="home-buttons">
+    <button class="btn-primary" onclick="showScreen('mode-select')">Empezar ahora</button>
+  </div>
+  <div class="topics-preview">
+    <div class="topic-chip" onclick="startLearnTopic(0)">
+      <span class="icon">🏛️</span>
+      <div><div class="tc-label">Regímenes y Afiliación</div><div class="tc-count">3 lecciones · 6 preguntas</div></div>
+    </div>
+    <div class="topic-chip" onclick="startLearnTopic(1)">
+      <span class="icon">💶</span>
+      <div><div class="tc-label">Cotizaciones y Bases</div><div class="tc-count">3 lecciones · 6 preguntas</div></div>
+    </div>
+    <div class="topic-chip" onclick="startLearnTopic(2)">
+      <span class="icon">🩺</span>
+      <div><div class="tc-label">Prestaciones</div><div class="tc-count">3 lecciones · 6 preguntas</div></div>
+    </div>
+    <div class="topic-chip" onclick="startLearnTopic(3)">
+      <span class="icon">⚖️</span>
+      <div><div class="tc-label">Derechos y Obligaciones</div><div class="tc-count">3 lecciones · 6 preguntas</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODE SELECT ===== -->
+<div id="mode-select" class="screen">
+  <h2 class="section-title">¿Cómo quieres<br>aprender hoy?</h2>
+  <p class="section-sub">Elige tu modo de estudio</p>
+  <div class="mode-cards">
+    <div class="mode-card learn" onclick="showScreen('topic-select'); setMode('learn')">
+      <div class="mode-icon">📖</div>
+      <div class="mode-name">Lección + Quiz</div>
+      <p class="mode-desc">Aprende el contenido paso a paso y consolida con preguntas al final de cada bloque.</p>
+      <span class="mode-tag">Recomendado</span>
+    </div>
+    <div class="mode-card quiz" onclick="showScreen('topic-select'); setMode('quiz')">
+      <div class="mode-icon">⚡</div>
+      <div class="mode-name">Solo Quiz</div>
+      <p class="mode-desc">Pon a prueba lo que ya sabes directamente con preguntas tipo test.</p>
+      <span class="mode-tag">Repaso rápido</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOPIC SELECT ===== -->
+<div id="topic-select" class="screen">
+  <h2 class="section-title" style="text-align:center">Elige un tema</h2>
+  <p class="section-sub" style="text-align:center">Selecciona el bloque que quieres estudiar</p>
+  <div class="topic-grid">
+    <div class="topic-card" data-color="blue" onclick="selectTopic(0)">
+      <div class="tc-icon">🏛️</div>
+      <div class="tc-name">Regímenes y Afiliación</div>
+      <p class="tc-desc">Cómo funciona la estructura del sistema y quién pertenece a cada régimen.</p>
+      <div class="tc-pills"><span class="tc-pill">Régimen General</span><span class="tc-pill">Autónomos (RETA)</span><span class="tc-pill">Alta/Baja</span></div>
+    </div>
+    <div class="topic-card" data-color="yellow" onclick="selectTopic(1)">
+      <div class="tc-icon">💶</div>
+      <div class="tc-name">Cotizaciones y Bases</div>
+      <p class="tc-desc">Cómo se calculan las cuotas, quién las paga y para qué sirven.</p>
+      <div class="tc-pills"><span class="tc-pill">Base de cotización</span><span class="tc-pill">Tipos</span><span class="tc-pill">Empresa vs trabajador</span></div>
+    </div>
+    <div class="topic-card" data-color="green" onclick="selectTopic(2)">
+      <div class="tc-icon">🩺</div>
+      <div class="tc-name">Prestaciones</div>
+      <p class="tc-desc">Qué cobro y cuándo: desempleo, incapacidad, jubilación y más.</p>
+      <div class="tc-pills"><span class="tc-pill">Paro</span><span class="tc-pill">IT</span><span class="tc-pill">Jubilación</span><span class="tc-pill">Maternidad</span></div>
+    </div>
+    <div class="topic-card" data-color="red" onclick="selectTopic(3)">
+      <div class="tc-icon">⚖️</div>
+      <div class="tc-name">Derechos y Obligaciones</div>
+      <p class="tc-desc">Lo que la ley garantiza y lo que exige a empresas y trabajadores.</p>
+      <div class="tc-pills"><span class="tc-pill">Obligaciones empresa</span><span class="tc-pill">Infracciones</span><span class="tc-pill">Derechos</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON SCREEN ===== -->
+<div id="lesson-screen" class="screen">
+  <div class="lesson-progress">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="lessonProgressBar"></div></div>
+    <span class="progress-label" id="lessonProgressLabel"></span>
+  </div>
+  <div class="lesson-card" id="lessonCard"></div>
+</div>
+
+<!-- ===== QUIZ SCREEN ===== -->
+<div id="quiz-screen" class="screen">
+  <div class="lesson-progress">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="quizProgressBar" style="background: var(--accent2)"></div></div>
+    <span class="progress-label" id="quizProgressLabel"></span>
+  </div>
+  <div class="quiz-card">
+    <div class="quiz-meta">
+      <span class="quiz-number" id="quizNumber"></span>
+      <span class="quiz-score-badge" id="quizScoreBadge">✓ 0 correctas</span>
+    </div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="options" id="quizOptions"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente pregunta →</button>
+  </div>
+</div>
+
+<!-- ===== RESULTS SCREEN ===== -->
+<div id="results-screen" class="screen">
+  <div class="score-ring">
+    <svg viewBox="0 0 140 140">
+      <circle class="bg-ring" cx="70" cy="70" r="65"/>
+      <circle class="fg-ring" id="resultRing" cx="70" cy="70" r="65"/>
+    </svg>
+    <div class="score-center" id="resultScore"></div>
+  </div>
+  <h2 class="result-title" id="resultTitle"></h2>
+  <p class="result-sub" id="resultSub"></p>
+  <div class="result-actions">
+    <button class="btn-primary" onclick="repeatQuiz()">Repetir quiz</button>
+    <button class="btn-secondary" onclick="showScreen('topic-select')">Otro tema</button>
+    <button class="btn-secondary" onclick="showScreen('home')">Inicio</button>
+  </div>
+</div>
+
+<script>
+// =====================
+// DATA
+// =====================
+const topics = [
+  {
+    id: 0, name: "Regímenes y Afiliación",
+    lessons: [
+      {
+        tag: "Lección 1 — Regímenes",
+        title: "¿Qué son los regímenes de la Seguridad Social?",
+        body: `
+          <p>La Seguridad Social española no es un sistema único para todos: está organizada en <strong>regímenes</strong>, es decir, diferentes «categorías» según el tipo de trabajo que realizas.</p>
+          <p>El más importante es el <strong>Régimen General</strong>, que incluye a la mayoría de trabajadores por cuenta ajena: empleados de empresas privadas, funcionarios no adscritos a mutualidades propias, etc.</p>
+          <div class="info-box">💡 <strong>Dato clave:</strong> El Régimen General afecta a más del 85% de los trabajadores afiliados en España.</div>
+          <p>Junto a él existen <strong>regímenes especiales</strong> para colectivos con características propias: autónomos (RETA), empleados del hogar, trabajadores del mar, minería del carbón y los estudiantes en prácticas.</p>
+        `
+      },
+      {
+        tag: "Lección 2 — Afiliación",
+        title: "Darse de alta: la afiliación",
+        body: `
+          <p>Antes de empezar a trabajar, todo trabajador debe estar <strong>afiliado</strong> a la Seguridad Social y en <strong>situación de alta</strong>. Son dos conceptos distintos:</p>
+          <div class="info-box green">✅ <strong>Afiliación:</strong> es un acto único en la vida. Se realiza la primera vez que trabajas y te asigna un <strong>número de afiliación (NAF)</strong> permanente.</div>
+          <div class="info-box">🔄 <strong>Alta:</strong> se produce cada vez que inicias una relación laboral. Puede haber múltiples altas y bajas a lo largo de tu vida laboral.</div>
+          <p>Normalmente es <strong>la empresa</strong> quien tramita tanto la afiliación como el alta del trabajador, antes o el mismo día de inicio del trabajo. El incumplimiento tiene sanciones graves.</p>
+        `
+      },
+      {
+        tag: "Lección 3 — El RETA",
+        title: "Los autónomos: el Régimen Especial",
+        body: `
+          <p>Los trabajadores por cuenta propia están encuadrados en el <strong>RETA (Régimen Especial de Trabajadores Autónomos)</strong>. A diferencia de los asalariados, ellos mismos gestionan y pagan su cotización.</p>
+          <p>Desde 2023 existe el <strong>sistema de cotización por ingresos reales</strong>: el autónomo declara sus rendimientos netos estimados y cotiza en función de tramos de ingresos, pudiendo ajustar la cuota cada dos meses.</p>
+          <div class="info-box yellow">⚠️ <strong>Recuerda:</strong> Un autónomo que no cotiza pierde el derecho a prestaciones como la incapacidad temporal o la jubilación. La cotización mínima en 2024 es de <strong>230€/mes</strong> aproximadamente.</div>
+        `
+      }
+    ],
+    quiz: [
+      {
+        q: "¿Cuál es el régimen que engloba a la mayoría de trabajadores asalariados en España?",
+        opts: ["Régimen Especial del Mar", "Régimen General", "RETA", "Régimen de Empleados del Hogar"],
+        correct: 1,
+        explain: "El Régimen General es el pilar central del sistema y agrupa a más del 85% de los afiliados: trabajadores por cuenta ajena de empresas privadas y determinados empleados públicos."
+      },
+      {
+        q: "¿Qué es el número de afiliación (NAF)?",
+        opts: ["Un código que cambia cada vez que cambias de empresa", "Un número que se obtiene solo si eres autónomo", "Un identificador único y permanente que se asigna la primera vez que trabajas", "El número de tu contrato laboral"],
+        correct: 2,
+        explain: "El NAF se asigna una sola vez en la vida, la primera vez que te afilias a la Seguridad Social. Permanece invariable aunque cambies de trabajo, régimen o tengas periodos sin cotizar."
+      },
+      {
+        q: "¿Quién es el responsable habitual de dar de alta a un trabajador por cuenta ajena en la Seguridad Social?",
+        opts: ["El propio trabajador", "El Ministerio de Trabajo", "La empresa empleadora", "La Inspección de Trabajo"],
+        correct: 2,
+        explain: "En el Régimen General, la empresa es quien tiene la obligación de tramitar el alta del trabajador antes o el mismo día en que inicia su actividad. No hacerlo constituye una infracción grave."
+      },
+      {
+        q: "¿Qué novedad introdujo el sistema de cotización del RETA desde 2023?",
+        opts: ["Los autónomos dejaron de cotizar", "La cuota es fija para todos en 400€/mes", "Se cotiza en función de los ingresos reales declarados", "Los autónomos pasan al Régimen General"],
+        correct: 2,
+        explain: "Desde enero de 2023, los autónomos cotizan según sus rendimientos netos reales, distribuidos en 15 tramos. Pueden modificar su base de cotización hasta 6 veces al año."
+      },
+      {
+        q: "¿Cuántas veces puede una persona afiliarse a la Seguridad Social a lo largo de su vida?",
+        opts: ["Tantas veces como empleos tenga", "Una sola vez", "Una vez por cada régimen diferente", "Dos veces como máximo"],
+        correct: 1,
+        explain: "La afiliación es un acto único y vitalicio. Una vez afiliado, el NAF te acompaña para siempre. Lo que se repite en cada nuevo empleo es el alta, no la afiliación."
+      },
+      {
+        q: "¿Cuál de estos colectivos NO pertenece al Régimen General?",
+        opts: ["Empleado de una empresa privada", "Funcionario de administración local", "Trabajador autónomo freelance", "Trabajador contratado a tiempo parcial"],
+        correct: 2,
+        explain: "Los trabajadores autónomos están encuadrados en el RETA (Régimen Especial de Trabajadores Autónomos), no en el Régimen General. El resto de opciones sí pertenecen habitualmente al Régimen General."
+      }
+    ]
+  },
+  {
+    id: 1, name: "Cotizaciones y Bases",
+    lessons: [
+      {
+        tag: "Lección 1 — Qué es cotizar",
+        title: "¿Para qué sirve cotizar?",
+        body: `
+          <p>Cotizar a la Seguridad Social es <strong>contribuir económicamente</strong> al sistema para tener derecho a sus prestaciones en el futuro: la jubilación, el paro, la baja por enfermedad, etc.</p>
+          <p>La cotización funciona como un <strong>seguro colectivo</strong>: todos aportamos según nuestros ingresos y el sistema nos protege cuando lo necesitamos.</p>
+          <div class="info-box">💡 No cotizar o hacerlo por debajo de lo real es ilegal y puede dejarte sin derechos a prestaciones o con una pensión reducida.</div>
+          <p>El periodo cotizado también determina el <strong>«periodo de carencia»</strong>: el mínimo de tiempo cotizado que se exige para acceder a cada prestación.</p>
+        `
+      },
+      {
+        tag: "Lección 2 — La base de cotización",
+        title: "Base de cotización: ¿sobre qué se calcula?",
+        body: `
+          <p>La <strong>base de cotización</strong> es el importe sobre el que se aplican los porcentajes para calcular cuánto hay que pagar. En el Régimen General se calcula a partir del <strong>salario bruto mensual</strong> más las pagas extraordinarias prorrateadas.</p>
+          <p>Tiene un <strong>mínimo y un máximo</strong> establecidos cada año por ley. En 2024:</p>
+          <div class="info-box green">📊 Base mínima: <strong>1.323€/mes</strong> (ligada al SMI)<br>Base máxima: <strong>4.720,50€/mes</strong></div>
+          <p>Si tu salario está entre estos límites, cotizas por tu salario real. Si supera el máximo, solo cotizas hasta ese tope.</p>
+        `
+      },
+      {
+        tag: "Lección 3 — Tipos y reparto",
+        title: "¿Cuánto paga cada uno?",
+        body: `
+          <p>A la base de cotización se aplican <strong>tipos de cotización</strong> (porcentajes). Existen tipos para contingencias comunes, desempleo, FOGASA y formación profesional.</p>
+          <p>La cuota se reparte entre <strong>empresa y trabajador</strong>, pero la proporción es muy desigual:</p>
+          <div class="info-box yellow">
+            🏢 <strong>Empresa:</strong> ~23,6% (contingencias comunes) + otros conceptos → total aprox. <strong>30%</strong><br>
+            👤 <strong>Trabajador:</strong> 4,7% (contingencias comunes) + 1,55% (desempleo) + 0,1% (FP) → total aprox. <strong>6,35%</strong>
+          </div>
+          <p>Por eso aunque el trabajador «descuenta» de su nómina, la empresa paga mucho más al sistema por cada empleado.</p>
+        `
+      }
+    ],
+    quiz: [
+      {
+        q: "¿Qué es la base de cotización?",
+        opts: ["El salario neto que cobra el trabajador", "El importe sobre el que se aplican los tipos para calcular la cuota", "La cantidad máxima que puede cobrar un trabajador", "El número de horas trabajadas al mes"],
+        correct: 1,
+        explain: "La base de cotización es el importe de referencia (ligado al salario bruto) sobre el que se aplican los porcentajes o tipos de cotización para obtener la cuota mensual a ingresar."
+      },
+      {
+        q: "¿Qué ocurre si el salario de un trabajador supera la base máxima de cotización?",
+        opts: ["Cotiza por su salario completo", "Está exento de cotizar", "Solo cotiza hasta la base máxima establecida", "Cambia de régimen automáticamente"],
+        correct: 2,
+        explain: "Existe un tope máximo de cotización. Si el salario supera ese techo, la cotización se calcula solo hasta la base máxima, independientemente de lo que se gane por encima."
+      },
+      {
+        q: "¿Quién aporta una mayor proporción a la Seguridad Social por cada empleado?",
+        opts: ["El trabajador", "La empresa y el trabajador a partes iguales", "La empresa", "El Estado"],
+        correct: 2,
+        explain: "La empresa aporta aproximadamente el 30% de la base de cotización, mientras que el trabajador solo aporta alrededor del 6,35%. La carga principal recae sobre el empleador."
+      },
+      {
+        q: "¿A qué se denomina «periodo de carencia»?",
+        opts: ["El tiempo que tarda Hacienda en devolver el IRPF", "El tiempo mínimo cotizado exigido para acceder a una prestación", "El periodo en que no se puede cobrar el paro", "La antigüedad mínima en una empresa para no ser despedido"],
+        correct: 1,
+        explain: "El periodo de carencia es el tiempo mínimo que hay que haber cotizado para tener derecho a una prestación concreta. Por ejemplo, para acceder a la prestación por desempleo se necesitan al menos 360 días cotizados en los últimos 6 años."
+      },
+      {
+        q: "La base de cotización en el Régimen General se calcula principalmente a partir de…",
+        opts: ["El salario neto mensual", "El salario bruto mensual incluyendo pagas extra prorrateadas", "Solo las pagas extraordinarias", "El Indicador Público de Renta de Efectos Múltiples (IPREM)"],
+        correct: 1,
+        explain: "La base de cotización incluye el salario bruto mensual más la parte proporcional de las pagas extraordinarias, las horas extra y otros conceptos retributivos regulares."
+      },
+      {
+        q: "¿Para qué sirve cotizar al concepto de FOGASA?",
+        opts: ["Para financiar las pensiones de jubilación", "Para cubrir salarios e indemnizaciones impagados por empresas insolventes", "Para sufragar la formación profesional continua", "Para pagar las prestaciones por desempleo"],
+        correct: 1,
+        explain: "El Fondo de Garantía Salarial (FOGASA) garantiza el cobro de salarios e indemnizaciones cuando una empresa no puede pagarlos por insolvencia o concurso de acreedores. La cotización a este fondo es íntegramente a cargo de la empresa."
+      }
+    ]
+  },
+  {
+    id: 2, name: "Prestaciones",
+    lessons: [
+      {
+        tag: "Lección 1 — Incapacidad Temporal",
+        title: "La baja por enfermedad (IT)",
+        body: `
+          <p>La <strong>Incapacidad Temporal (IT)</strong> es la prestación que cubre los periodos en los que no puedes trabajar por enfermedad o accidente.</p>
+          <p>Existen dos tipos principales:</p>
+          <div class="info-box green">🤧 <strong>Enfermedad común o accidente no laboral:</strong> se exigen 180 días cotizados en los últimos 5 años. La prestación empieza a pagarse desde el <strong>4.º día</strong> de baja.</div>
+          <div class="info-box">🦺 <strong>Accidente de trabajo o enfermedad profesional:</strong> no hay periodo de carencia. La prestación se percibe desde el día siguiente al accidente.</div>
+          <p>El <strong>importe</strong> varía: entre el 60% y el 75% de la base reguladora, según los días de baja y el tipo de contingencia.</p>
+        `
+      },
+      {
+        tag: "Lección 2 — Desempleo",
+        title: "El paro: cómo funciona",
+        body: `
+          <p>La <strong>prestación contributiva por desempleo</strong> (el «paro») es la ayuda económica que se percibe al quedarse sin trabajo de forma involuntaria.</p>
+          <p>Para tener derecho necesitas:</p>
+          <div class="info-box yellow">📋 Haber cotizado al menos <strong>360 días</strong> en los últimos 6 años<br>Que la extinción del contrato sea <strong>involuntaria</strong> (despido, ERE, fin de contrato temporal…)<br>Estar en situación legal de desempleo e inscrito como demandante de empleo</div>
+          <p>La duración varía entre <strong>4 meses</strong> (360 días cotizados) y <strong>24 meses</strong> (6 años o más cotizados). El importe es el 70% de la base reguladora los primeros 6 meses, y el 60% a partir del 7.º mes.</p>
+        `
+      },
+      {
+        tag: "Lección 3 — Jubilación y otras",
+        title: "Jubilación, maternidad y paternidad",
+        body: `
+          <p>La <strong>pensión de jubilación</strong> es la prestación más importante del sistema. Para acceder a la jubilación ordinaria en 2024 necesitas tener <strong>65 años</strong> y al menos <strong>15 años cotizados</strong> (de los cuales 2 en los últimos 15 años).</p>
+          <div class="info-box">📈 Cuantos más años cotizados, mayor es la pensión. Con 37 años y 3 meses (2024) se tiene derecho al 100% de la base reguladora.</div>
+          <p>El <strong>nacimiento y cuidado del menor</strong> da derecho a <strong>16 semanas</strong> de permiso remunerado tanto para la madre como para el padre (intransferibles). La prestación es el <strong>100% de la base reguladora</strong>, sin periodo de carencia para nacimiento biológico.</p>
+          <p>Existen también prestaciones por <strong>riesgo durante el embarazo</strong>, <strong>incapacidad permanente</strong>, <strong>viudedad</strong>, <strong>orfandad</strong> y el <strong>Ingreso Mínimo Vital (IMV)</strong>.</p>
+        `
+      }
+    ],
+    quiz: [
+      {
+        q: "¿Desde qué día cobra el trabajador la prestación por Incapacidad Temporal derivada de enfermedad común?",
+        opts: ["Desde el primer día de baja", "Desde el segundo día de baja", "Desde el cuarto día de baja", "Desde el decimoquinto día de baja"],
+        correct: 2,
+        explain: "En la IT por enfermedad común o accidente no laboral, los primeros 3 días de baja (días 1, 2 y 3) no se cobran. La prestación empieza a devengarse a partir del 4.º día."
+      },
+      {
+        q: "¿Cuántos días cotizados son necesarios como mínimo para cobrar la prestación por desempleo?",
+        opts: ["180 días", "360 días", "720 días", "1.800 días"],
+        correct: 1,
+        explain: "Se necesitan al menos 360 días cotizados en los últimos 6 años para tener derecho a la prestación contributiva por desempleo, lo que da derecho a 4 meses de paro."
+      },
+      {
+        q: "¿Cuál es la duración del permiso por nacimiento y cuidado del menor para cada progenitor?",
+        opts: ["8 semanas", "12 semanas", "16 semanas", "20 semanas"],
+        correct: 2,
+        explain: "Desde 2021, ambos progenitores tienen derecho a 16 semanas de permiso (intransferibles) con el 100% de la base reguladora. 6 de esas semanas deben disfrutarse obligatoriamente justo tras el parto o adopción."
+      },
+      {
+        q: "¿Qué porcentaje de la base reguladora se cobra a partir del 7.º mes de prestación por desempleo?",
+        opts: ["70%", "65%", "60%", "50%"],
+        correct: 2,
+        explain: "La prestación por desempleo es del 70% de la base reguladora durante los primeros 180 días (6 meses) y del 60% a partir del día 181 (7.º mes) hasta el fin de la prestación."
+      },
+      {
+        q: "¿Hay periodo de carencia para acceder a la IT por accidente de trabajo?",
+        opts: ["Sí, 180 días cotizados", "Sí, 30 días cotizados", "No, no hay periodo de carencia", "Depende del tipo de empresa"],
+        correct: 2,
+        explain: "Los accidentes de trabajo y enfermedades profesionales no requieren periodo de carencia. La protección es inmediata: se percibe prestación desde el día siguiente al accidente."
+      },
+      {
+        q: "¿Qué es el Ingreso Mínimo Vital (IMV)?",
+        opts: ["Una prestación para jubilados con pensiones bajas", "Una prestación no contributiva que garantiza ingresos mínimos a personas en situación de vulnerabilidad", "El salario mínimo interprofesional (SMI)", "Una ayuda temporal solo para desempleados de larga duración"],
+        correct: 1,
+        explain: "El IMV es una prestación no contributiva de la Seguridad Social creada en 2020 que garantiza un nivel mínimo de renta a personas y hogares en situación de vulnerabilidad económica, independientemente de si han cotizado."
+      }
+    ]
+  },
+  {
+    id: 3, name: "Derechos y Obligaciones",
+    lessons: [
+      {
+        tag: "Lección 1 — Obligaciones de empresa",
+        title: "Lo que debe hacer el empleador",
+        body: `
+          <p>Las empresas tienen una serie de <strong>obligaciones legales</strong> frente a la Seguridad Social que no pueden eludir:</p>
+          <div class="info-box">📌 <strong>Inscripción:</strong> antes de contratar a alguien, la empresa debe inscribirse en la Seguridad Social y obtener un Código de Cuenta de Cotización (CCC).</div>
+          <div class="info-box green">⏱️ <strong>Afiliación y alta:</strong> debe tramitar el alta del trabajador antes o el mismo día del inicio de la actividad.</div>
+          <div class="info-box yellow">💳 <strong>Cotización:</strong> ingresar mensualmente las cuotas (tanto la parte del trabajador como la de la empresa) antes del último día de cada mes.</div>
+          <p>El incumplimiento puede suponer <strong>recargos, sanciones y responsabilidad directa</strong> en el pago de prestaciones al trabajador.</p>
+        `
+      },
+      {
+        tag: "Lección 2 — Derechos del trabajador",
+        title: "¿Qué tienes derecho a recibir?",
+        body: `
+          <p>Todo trabajador afiliado y en alta tiene derechos reconocidos por la Seguridad Social:</p>
+          <div class="info-box green">✅ Asistencia sanitaria pública<br>✅ Prestaciones económicas (IT, paro, jubilación…)<br>✅ Protección frente a accidentes de trabajo y enfermedades profesionales<br>✅ Acceso al historial de vida laboral en cualquier momento</div>
+          <p>Puedes consultar tu vida laboral, tus bases de cotización y los días cotizados a través de la <strong>Sede Electrónica de la Seguridad Social</strong> (sede.seg-social.gob.es) con certificado digital, Cl@ve o SMS.</p>
+          <div class="info-box">📱 La app <strong>Import@ss</strong> es la herramienta oficial para consultar tu vida laboral desde el móvil.</div>
+        `
+      },
+      {
+        tag: "Lección 3 — Infracciones y sanciones",
+        title: "Qué pasa si no se cumplen las normas",
+        body: `
+          <p>La Ley de Infracciones y Sanciones en el Orden Social (LISOS) clasifica las infracciones en <strong>leves, graves y muy graves</strong>:</p>
+          <div class="info-box">🟡 <strong>Leve:</strong> no conservar documentación, pequeños retrasos. Multa de 60 a 625€.</div>
+          <div class="info-box yellow">🟠 <strong>Grave:</strong> no dar de alta a trabajadores, cotizar por debajo de lo real. Multa de 626 a 6.250€.</div>
+          <div class="info-box" style="border-color: var(--red)">🔴 <strong>Muy grave:</strong> obtener prestaciones fraudulentamente, obstaculizar la inspección. Multa de 6.251 a 187.515€.</div>
+          <p>Además, si la empresa no cotizó por un trabajador, la <strong>propia empresa responderá</strong> directamente de las prestaciones que le correspondan a ese trabajador.</p>
+        `
+      }
+    ],
+    quiz: [
+      {
+        q: "¿Qué es el Código de Cuenta de Cotización (CCC)?",
+        opts: ["El número de afiliación del trabajador", "Un código que identifica a la empresa ante la Seguridad Social para cotizar", "El número de contrato de trabajo", "El código del convenio colectivo aplicable"],
+        correct: 1,
+        explain: "El CCC es el identificador que la Seguridad Social asigna a la empresa al inscribirse. Es necesario para liquidar cotizaciones y gestionar altas y bajas de los trabajadores."
+      },
+      {
+        q: "¿Dónde puede un trabajador consultar sus días cotizados y su vida laboral?",
+        opts: ["Solo en las oficinas del SEPE", "En la Sede Electrónica de la Seguridad Social o con la app Import@ss", "Solo mediante una carta certificada al INSS", "En la Agencia Tributaria (AEAT)"],
+        correct: 1,
+        explain: "La Seguridad Social ofrece acceso a la vida laboral online a través de su Sede Electrónica (con Cl@ve, certificado digital o SMS) y mediante la app oficial Import@ss para móvil."
+      },
+      {
+        q: "Si una empresa no da de alta a un trabajador y este sufre un accidente, ¿quién responde de las prestaciones?",
+        opts: ["El FOGASA", "El propio trabajador", "La empresa empleadora directamente", "Ninguna entidad, ya que el trabajador no estaba dado de alta"],
+        correct: 2,
+        explain: "La responsabilidad directa recae sobre la empresa infractora. Esto se conoce como 'responsabilidad empresarial directa en prestaciones': el incumplimiento del deber de dar de alta no perjudica al trabajador, sino que se vuelve contra la empresa."
+      },
+      {
+        q: "Según la LISOS, ¿cómo se clasifica no dar de alta a un trabajador en la Seguridad Social?",
+        opts: ["Infracción leve", "Infracción grave", "Infracción muy grave", "No es infracción si el contrato es verbal"],
+        correct: 1,
+        explain: "No afiliar o no dar de alta a un trabajador es una infracción grave según la LISOS, sancionable con multas de entre 626 y 6.250 euros, además de la posible responsabilidad directa en prestaciones."
+      },
+      {
+        q: "¿Cuándo debe ingresar la empresa las cuotas de Seguridad Social de sus trabajadores?",
+        opts: ["En los primeros 10 días de cada mes", "Antes del último día del mes en que se devengan", "Trimestralmente junto con el modelo 303 de IVA", "En los primeros 20 días del mes siguiente"],
+        correct: 1,
+        explain: "Las cuotas de Seguridad Social deben liquidarse antes del último día del mes al que corresponden, mediante el sistema RED o los sistemas habilitados por la TGSS."
+      },
+      {
+        q: "¿Cuál de los siguientes es un derecho del trabajador garantizado por la Seguridad Social?",
+        opts: ["Elegir libremente su mutua de accidentes", "Cobrar el 100% de su salario en cualquier baja médica", "Acceder a asistencia sanitaria pública y prestaciones económicas", "Que la empresa pague íntegramente su cotización"],
+        correct: 2,
+        explain: "Entre los derechos fundamentales reconocidos por la Seguridad Social están la asistencia sanitaria pública y el acceso a las prestaciones económicas (IT, desempleo, jubilación…) cuando se cumplen los requisitos."
+      }
+    ]
+  }
+];
+
+// =====================
+// STATE
+// =====================
+let currentMode = 'learn';
+let currentTopicIdx = 0;
+let currentLessonIdx = 0;
+let currentQuizIdx = 0;
+let quizScore = 0;
+let quizAnswered = false;
+let currentQuizQuestions = [];
+let history = [];
+
+// =====================
+// NAVIGATION
+// =====================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const backBtn = document.getElementById('backBtn');
+  backBtn.classList.toggle('visible', id !== 'home');
+  history.push(id);
+  window.scrollTo(0,0);
+}
+
+function goBack() {
+  history.pop();
+  const prev = history.length ? history[history.length-1] : 'home';
+  history.pop();
+  showScreen(prev);
+}
+
+function setMode(mode) { currentMode = mode; }
+
+function selectTopic(idx) {
+  currentTopicIdx = idx;
+  if (currentMode === 'learn') {
+    currentLessonIdx = 0;
+    showLesson();
+  } else {
+    startQuiz();
+  }
+}
+
+function startLearnTopic(idx) {
+  currentMode = 'learn';
+  currentTopicIdx = idx;
+  currentLessonIdx = 0;
+  history = ['home'];
+  showLesson();
+}
+
+// =====================
+// LESSONS
+// =====================
+function showLesson() {
+  showScreen('lesson-screen');
+  const topic = topics[currentTopicIdx];
+  const lesson = topic.lessons[currentLessonIdx];
+  const total = topic.lessons.length;
+  const pct = ((currentLessonIdx + 1) / (total + 1)) * 100;
+
+  document.getElementById('lessonProgressBar').style.width = pct + '%';
+  document.getElementById('lessonProgressLabel').textContent = `Lección ${currentLessonIdx+1} de ${total}`;
+
+  const isLast = currentLessonIdx === total - 1;
+  document.getElementById('lessonCard').innerHTML = `
+    <div class="lesson-tag"><span class="dot"></span>${lesson.tag}</div>
+    <h2 class="lesson-title">${lesson.title}</h2>
+    <div class="lesson-body">${lesson.body}</div>
+    <div class="lesson-nav">
+      <button class="btn-nav" onclick="prevLesson()" ${currentLessonIdx === 0 ? 'disabled' : ''}>← Anterior</button>
+      <button class="btn-nav next" onclick="${isLast ? 'startQuiz()' : 'nextLesson()'}">${isLast ? '✏️ Ir al Quiz' : 'Siguiente →'}</button>
+    </div>
+  `;
+}
+
+function nextLesson() {
+  currentLessonIdx++;
+  showLesson();
+}
+function prevLesson() {
+  if (currentLessonIdx > 0) { currentLessonIdx--; showLesson(); }
+}
+
+// =====================
+// QUIZ
+// =====================
+function startQuiz() {
+  currentQuizIdx = 0;
+  quizScore = 0;
+  currentQuizQuestions = [...topics[currentTopicIdx].quiz];
+  showQuizQuestion();
+}
+
+function showQuizQuestion() {
+  showScreen('quiz-screen');
+  const q = currentQuizQuestions[currentQuizIdx];
+  const total = currentQuizQuestions.length;
+  const pct = (currentQuizIdx / total) * 100;
+
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+  document.getElementById('quizProgressLabel').textContent = `Pregunta ${currentQuizIdx+1} de ${total}`;
+  document.getElementById('quizNumber').textContent = `${topics[currentTopicIdx].name}`;
+  document.getElementById('quizScoreBadge').textContent = `✓ ${quizScore} correcta${quizScore !== 1 ? 's' : ''}`;
+  document.getElementById('quizQuestion').textContent = q.q;
+  document.getElementById('feedbackBox').style.display = 'none';
+  document.getElementById('quizNext').style.display = 'none';
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('quizOptions').innerHTML = q.opts.map((opt, i) => `
+    <button class="option-btn" onclick="answerQuestion(${i})">
+      <span class="opt-letter">${letters[i]}</span>
+      ${opt}
+    </button>
+  `).join('');
+}
+
+function answerQuestion(idx) {
+  const q = currentQuizQuestions[currentQuizIdx];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.correct;
+  if (isCorrect) quizScore++;
+
+  btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[q.correct].classList.add('correct');
+
+  const fb = document.getElementById('feedbackBox');
+  fb.className = 'feedback-box ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = `<span class="feedback-icon">${isCorrect ? '✅' : '❌'}</span> <strong>${isCorrect ? '¡Correcto!' : 'Incorrecto.'}</strong> ${q.explain}`;
+  fb.style.display = 'block';
+
+  document.getElementById('quizScoreBadge').textContent = `✓ ${quizScore} correcta${quizScore !== 1 ? 's' : ''}`;
+
+  const nextBtn = document.getElementById('quizNext');
+  const isLast = currentQuizIdx === currentQuizQuestions.length - 1;
+  nextBtn.textContent = isLast ? '📊 Ver resultados' : 'Siguiente pregunta →';
+  nextBtn.style.display = 'block';
+}
+
+function nextQuestion() {
+  currentQuizIdx++;
+  if (currentQuizIdx >= currentQuizQuestions.length) {
+    showResults();
+  } else {
+    showQuizQuestion();
+  }
+}
+
+// =====================
+// RESULTS
+// =====================
+function showResults() {
+  showScreen('results-screen');
+  const total = currentQuizQuestions.length;
+  const pct = Math.round((quizScore / total) * 100);
+  const circumference = 2 * Math.PI * 65;
+  const offset = circumference - (pct / 100) * circumference;
+
+  document.getElementById('resultScore').textContent = `${quizScore}/${total}`;
+  document.getElementById('resultRing').style.strokeDashoffset = circumference;
+  setTimeout(() => {
+    document.getElementById('resultRing').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, sub, color;
+  if (pct === 100) {
+    title = '¡Perfecto! 🏆'; sub = 'Dominas este tema completamente.'; color = 'var(--accent3)';
+  } else if (pct >= 66) {
+    title = '¡Muy bien! 👏'; sub = 'Buen dominio del tema. Repasa los fallos.'; color = 'var(--accent)';
+  } else if (pct >= 33) {
+    title = 'Puedes mejorar 💪'; sub = 'Hay conceptos que reforzar. ¡Repasa las lecciones!'; color = 'var(--accent2)';
+  } else {
+    title = 'A repasar 📖'; sub = 'Te recomendamos volver a las lecciones antes del quiz.'; color = 'var(--red)';
+  }
+
+  document.getElementById('resultRing').style.stroke = color;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSub').textContent = sub;
+}
+
+function repeatQuiz() { startQuiz(); }
+</script>
+</body>
+</html>
